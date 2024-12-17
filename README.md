@@ -25,7 +25,7 @@ Make sure you have a C++17 compatible compiler installed (like GCC or Clang) and
 
 1. Clone this repository:
    ```bash
-   git clone https://github.com/yourusername/CppWebServer.git
+   git clone https://github.com/The-Jat/CppWeb.git
    cd CppWebServer
 2. Build the project (using g++):
    ```bash
