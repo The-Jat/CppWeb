@@ -40,3 +40,15 @@ Make sure you have a C++17 compatible compiler installed (like GCC or Clang) and
    curl http://localhost:8080
    ```
    or Visit the brower at this link: http://localhost:8080
+
+---
+### Output
+
+#### 1. Server Running  
+The server is up and running successfully, as shown in the following screenshot:  
+![Server Running](screenshots/server_running.png "Server Running")
+
+
+#### 2. Browser as Client  
+The browser is used as a client to make a request to the server. The following screenshot demonstrates the response:  
+![Browser as Client](screenshots/browser_as_client.png "Browser as Client")
