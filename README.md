@@ -12,7 +12,7 @@ A lightweight, fast, and simple HTTP server written in C++. This project demonst
 ## Requirements
 
 - C++17 or later
-- A C++ compiler (GCC, Clang, MSVC, etc.)
+- A C++ compiler (GCC, Clang, MSVC, etc.), Only tested in GCC.
 - Basic networking libraries like `iostream`, `sys/socket.h`, `netinet/in.h`, etc.
 
 ## Installation
