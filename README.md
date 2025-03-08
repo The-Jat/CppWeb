@@ -4,6 +4,7 @@ A lightweight, fast, and simple HTTP server written in C++. This project demonst
 
 ## Current Achievements
  - Transmits hello world html page as a response to client.
+ - Able to load the style.css and script.js
 
 ## TODO
 
