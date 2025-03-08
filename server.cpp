@@ -5,6 +5,7 @@
 #include <sys/socket.h>
 #include <fstream>
 #include <sstream>
+#include <algorithm>
 
 using namespace std;
 
@@ -12,7 +13,7 @@ using namespace std;
 
 // Utility function to read the contents of a file into a string.
 string readFileContent(const string &filename) {
-    ifstream file(filename);
+    ifstream file(filename, ios::binary); // Read in binary mode for all file types
     if (!file.is_open()) {
         cerr << "Could not open file: " << filename << endl;
         return "";
@@ -21,6 +22,20 @@ string readFileContent(const string &filename) {
     buffer << file.rdbuf();
     return buffer.str();
 }
+
+
+bool endsWith(const std::string &str, const std::string &suffix) {
+    if (str.size() < suffix.size()) return false;
+    return std::equal(suffix.rbegin(), suffix.rend(), str.rbegin());
+}
+
+std::string getContentType(const std::string &filepath) {
+    if (endsWith(filepath, ".html")) return "text/html";
+    if (endsWith(filepath, ".css")) return "text/css";
+    if (endsWith(filepath, ".js")) return "application/javascript";
+    return "text/plain"; // Default type
+}
+
 
 void handleClient(int clientSocket) {
     char buffer[1024] = {0};
@@ -38,28 +53,33 @@ void handleClient(int clientSocket) {
     char method[10], route[1024];
     sscanf(buffer, "%s %s", method, route);
 
-    string filepath;
+    string filepath = route;
     
-    // Determine file path based on route.
+    // If root is requested, serve index.html
     if (strcmp(route, "/") == 0) {
         filepath = "index.html";
     } else if (strcmp(route, "/about") == 0) {
         filepath = "about.html";
     } else {
-        filepath = "404.html";
+        // Remove leading '/' and use it as file path
+        filepath = route + 1;
     }
 
     // Read file content from disk.
     string fileContent = readFileContent(filepath);
     if (fileContent.empty()) {
-        // Fallback response if file is not found or empty.
-        fileContent = "<html><body><h1>File Not Found</h1></body></html>";
+        // If file not found, serve 404 page.
+        fileContent = "<html><body><h1>404 Not Found</h1></body></html>";
+        filepath = "404.html"; // Fallback to setting proper type for response
     }
+
+    // Determine content type.
+    string contentType = getContentType(filepath);
 
     // Build HTTP response.
     stringstream responseStream;
     responseStream << "HTTP/1.1 200 OK\r\n";
-    responseStream << "Content-Type: text/html\r\n";
+    responseStream << "Content-Type: " << contentType << "\r\n";
     responseStream << "Content-Length: " << fileContent.length() << "\r\n";
     responseStream << "\r\n";
     responseStream << fileContent;
